@@ -9,13 +9,19 @@ example(shortenerExample1, "shortenerExample1")
 
 
 ;creating a shortener using standard one sign symbols for amounts of data
-shortenerExample1 := new IntShortening(2, "k", "M", "G")
-example(shortenerExample1, "shortenerExample1")
+shortenerExample2 := new IntShortening(2, "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+shortenerExample2.0 := "B"
+example(shortenerExample2, "shortenerExample2")
 
 
 ;the shortening class could use any string for the ending
-shortenerExample2 := new IntShortening(1, " thousand", " million", " billion")
-example(shortenerExample2, "shortenerExample2")
+shortenerExample3 := new IntShortening(1, " thousand", " million", " billion")
+example(shortenerExample3, "shortenerExample3")
+
+
+;for numbers larger than 2147483647 (maximum integer size), pass them as strings
+shortenerExample4 := new IntShortening(2, "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+MsgBox, % """12345678901234567890"" shortened: " . shortenerExample2.stdFloor("12345678901234567890")
 
 
 return
@@ -51,16 +57,10 @@ DynExample(obj, min, max, exampleText){
 		correction := max - 2147483647
 
 	Loop, 5 {
-		if(correction){
-			Random, num, 2147483647 - (max - min), 2147483647
-			max += 2147483647
-			min += 2147483647
-		} else {
-			Random, num, min, max
-		}
+		Random, num, min, max
 		
-		test .= Format("`nMethod: {1:s}, Accuracy: {2:d}, Input: {3:d}, Out: {4:s}", "stdFloor(int)", obj.accuracy, num, obj.stdFloor(num))
-		test .= Format("`nMethod: {1:s}, Accuracy: {2:d}, Input: {3:d}, Out: {4:s}", "stdRound(int)", obj.accuracy, num, obj.stdRound(num))
+		test .= Format("`nMethod: {1:s}, Accuracy: {2:d}, Input: {3:s}, Out: {4:s}", "stdFloor(int)", obj.accuracy, num, obj.stdFloor(num))
+		test .= Format("`nMethod: {1:s}, Accuracy: {2:d}, Input: {3:s}, Out: {4:s}", "stdRound(int)", obj.accuracy, num, obj.stdRound(num))
 	}
 	return, test
 }
